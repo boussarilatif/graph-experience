@@ -23,7 +23,7 @@ const UserSchema = new Schema({
     },
     joinDate: {
         type: Date,
-        default: Date.now
+        default: Date.now()
     },
     favorites: {
         type: [mongoose.Schema.Types.ObjectId],

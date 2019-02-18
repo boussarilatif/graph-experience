@@ -1,4 +1,6 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
+import md5 from "md5";
+import bcrypt from "bcrypt"
 
 const Schema = mongoose.Schema
 
@@ -30,6 +32,28 @@ const UserSchema = new Schema({
         required: true,
         ref: "Post"
     }
+})
+
+
+UserSchema.pre("save", function (next) {
+    this.avatar = `http://gravatar.com/avatar/${md5(this.username)}?d=identicon`
+    next()
+})
+
+UserSchema.pre("save", function (next) {
+    if (!this.isModified()) {
+        return next()
+    }
+
+    bcrypt.genSalt(10, (err, salt) => {
+        if (err) return next(err)
+        bcrypt.hash(this.password, salt, (err, hash) => {
+            if (err) return next(err)
+
+            this.password = hash;
+            next()
+        })
+    })
 })
 
 export default mongoose.model("User", UserSchema)

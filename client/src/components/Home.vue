@@ -42,33 +42,15 @@ export default {
       posts: []
     };
   },
-  apollo: {
-    getPosts: {
-      query: gql`
-        query {
-          getPosts {
-            title
-            description
-            imageUrl
-            likes
-            _id
-            createdBy {
-              username
-              _id
-              joinDate
-            }
-          }
-        }
-      `,
-      result(args) {
-        console.log(args);
-      },
-      error(err) {
-        console.error(err);
-      }
-    }
+  mounted() {
+    this.getPosts();
+    console.log("boj");
   },
-  mounted() {}
+  methods: {
+    getPosts() {
+      this.$store.dispatch("getPosts");
+    }
+  }
 };
 </script>
 
